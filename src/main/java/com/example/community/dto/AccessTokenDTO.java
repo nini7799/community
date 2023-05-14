@@ -1,4 +1,4 @@
-package com.example.community.controller.dto;
+package com.example.community.dto;
 //DTO  Data Transfer Object 数据传输模型
 // 有5个参数，当参数超过两个时就将其封装为对象
 public class AccessTokenDTO {

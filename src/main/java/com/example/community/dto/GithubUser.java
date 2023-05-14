@@ -1,4 +1,4 @@
-package com.example.community.controller.dto;
+package com.example.community.dto;
 
 public class GithubUser {
     private String name;

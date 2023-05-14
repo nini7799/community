@@ -1,4 +1,4 @@
-package com.example.community.controller.model;
+package com.example.community.model;
 
 public class User {
     private Integer id;

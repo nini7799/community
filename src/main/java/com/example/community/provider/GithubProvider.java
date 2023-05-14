@@ -1,8 +1,8 @@
 package com.example.community.provider;
 
 import com.alibaba.fastjson2.JSON;
-import com.example.community.controller.dto.AccessTokenDTO;
-import com.example.community.controller.dto.GithubUser;
+import com.example.community.dto.AccessTokenDTO;
+import com.example.community.dto.GithubUser;
 import okhttp3.*;
 import org.springframework.stereotype.Component;
 
