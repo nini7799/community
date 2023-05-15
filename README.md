@@ -17,7 +17,8 @@
 [Visual Paradigm](https://www.visual-paradigm.com)
 [Okhttp](@GetMapping("/callback"))
 [Maven仓库](https://mvnrepository.com/)
-
+[flyway数据库版本管理工具](https://flywaydb.org/)
+[flyway配置](https://flywaydb.org/documentation/configuration/configfile.html)
 ##脚本
 ```sql
 create table USER1
