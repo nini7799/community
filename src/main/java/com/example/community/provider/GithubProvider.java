@@ -7,6 +7,7 @@ import okhttp3.*;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.time.Duration;
 
 import static org.springframework.http.RequestEntity.post;
 
@@ -15,7 +16,10 @@ public class GithubProvider {
     public String getAccessToken(AccessTokenDTO accessTokenDTO) {
 
         MediaType mediaType = MediaType.get("application/json;charset=utf-8");
-        OkHttpClient client = new OkHttpClient();
+
+        OkHttpClient client = new OkHttpClient.Builder().callTimeout(Duration.ofMinutes(30))
+                .readTimeout(Duration.ofMinutes(30)).connectTimeout(Duration.ofMinutes(30))
+                .retryOnConnectionFailure(true).build();
 
         RequestBody body = RequestBody.create(mediaType, JSON.toJSONString(accessTokenDTO));
         Request request = new Request.Builder()
@@ -25,6 +29,7 @@ public class GithubProvider {
         try (Response response = client.newCall(request).execute()) {
 
             String string = response.body().string();
+            System.out.println(string);
             String token = string.split("&")[0].split("=")[1];
 
             return token;
@@ -50,11 +55,11 @@ public class GithubProvider {
         try {
             Response response = client.newCall(request).execute();
             String string = response.body().string();
+            System.out.println(string);
             GithubUser githubUser = JSON.parseObject(string, GithubUser.class);
             return githubUser;
         } catch (IOException e) {
-
-
+            e.printStackTrace();
         }return null;
 
     }

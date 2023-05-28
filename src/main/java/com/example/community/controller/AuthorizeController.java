@@ -1,10 +1,11 @@
 package com.example.community.controller;
 
+import com.alibaba.fastjson2.JSON;
 import com.example.community.dto.AccessTokenDTO;
 import com.example.community.dto.GithubUser;
-import com.example.community.mapper.UserMapper;
 import com.example.community.model.User;
 import com.example.community.provider.GithubProvider;
+import com.example.community.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -28,8 +29,10 @@ public class AuthorizeController {
     @Value("${github.redirect.uri}")
     private  String redirectUri;
 
+
     @Autowired
-    private UserMapper userMapper;
+    private UserService userService;
+
 
     @GetMapping("/callback")
     public String callback(@RequestParam(name="code")String code,
@@ -43,22 +46,25 @@ public class AuthorizeController {
         accessTokenDTO.setState(state);
         String accessToken = githubProvider.getAccessToken(accessTokenDTO);
         GithubUser githubUser = githubProvider.getUser(accessToken);
-        System.out.println(githubUser.getName());
-     if(githubUser !=null){
+        System.out.println("登录用户"+ JSON.toJSON(githubUser));
+
+     if(githubUser !=null && githubUser.getId() !=null ){
+         System.out.println("登录成功");
             User user = new User();
          String token = UUID.randomUUID().toString();
          user.setToken(token);
             user.setName(githubUser.getName());
             user.setAccountId(String.valueOf(githubUser.getId()));
-            user.setGmtCreate(System.currentTimeMillis());
-            user.setGmtModified(user.getGmtCreate());
-            userMapper.insert(user);
+
+            user.setAvatarUrl(githubUser.getAvatar_url());
+            userService.CreateOrUpdate(user);
             //自动写入cookie
            response.addCookie(new Cookie("token",token));
 
         /*  插入数据库的过程就相当于写入了session，所以不需要再额外写入session
             //登陆成功，写cookie和session
             request.getSession().setAttribute("user",githubUser);  */
+
 
 
             return "redirect:/";
